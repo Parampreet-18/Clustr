@@ -111,7 +111,7 @@ export default function Navbar() {
       <div className="hidden md:flex items-center gap-3 shrink-0">
 
         <button
-        onClick={() => window.location.href = "http://localhost:5174"}
+        onClick={() => window.location.href = "https://clustr1.vercel.app/login"}
           className="text-[13.5px] text-neutral-300 hover:text-white transition-colors duration-200 px-5 py-1.5 rounded-full hover:bg-white/[0.08] cursor-pointer"
           style={{ fontFamily: "'DM Sans', sans-serif" }}
         >
