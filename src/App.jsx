@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Hero from "./components/hero";
-import Navbar from "./components/navbar";
+import Hero from "./components/Hero";
+import Navbar from "./components/Navbar";
 import OurMission from "./components/OurMission";
 import Learn from "./components/Learn";
 import GlobalLearners from "./components/GlobalLearners";
