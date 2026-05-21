@@ -83,18 +83,18 @@ const FEATURES = [
   },
 ];
 
-// ── INFINITE CONVEYOR BELT CAROUSEL ─────────────────────────────
+
 function FeatureCarousel({ inView }) {
   const trackRef  = useRef(null);
   const posRef    = useRef(0);
   const pausedRef = useRef(false);
   const rafRef    = useRef(null);
-  const SPEED     = 0.55; // px per frame
-  const CARD_W    = 460 + 24; // card width + gap
+  const SPEED     = 0.55; 
+  const CARD_W    = 460 + 24; 
 
-  // We render cards duplicated: [original + clone] so when we reach
-  // the end of originals we silently jump back to start
-  const cards = [...FEATURES, ...FEATURES]; // duplicate for seamless loop
+
+
+  const cards = [...FEATURES, ...FEATURES]; 
 
   useEffect(() => {
     if (!inView) return;
@@ -104,7 +104,7 @@ function FeatureCarousel({ inView }) {
       if (el && !pausedRef.current) {
         posRef.current += SPEED;
         const halfScroll = CARD_W * FEATURES.length;
-        // Seamless reset — jump back by exactly half (the clone point)
+
         if (posRef.current >= halfScroll) {
           posRef.current -= halfScroll;
         }
@@ -119,7 +119,7 @@ function FeatureCarousel({ inView }) {
 
   return (
     <div className="relative">
-      {/* Fade masks on edges */}
+
       <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0d0d0d] to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0d0d0d] to-transparent z-10 pointer-events-none" />
 
@@ -146,7 +146,7 @@ function FeatureCarousel({ inView }) {
                 e.currentTarget.style.boxShadow  = "";
               }}
             >
-              {/* Header row */}
+
               <div className="flex items-start justify-between">
                 <div className={`w-12 h-12 rounded-2xl ${c.faint} border ${c.border} flex items-center justify-center ${c.text}`}>
                   {f.icon}
@@ -157,7 +157,7 @@ function FeatureCarousel({ inView }) {
                 </span>
               </div>
 
-              {/* Title */}
+
               <h3
                 className="text-[34px] font-extrabold leading-[1.08] tracking-[-1.5px] text-white whitespace-pre-line"
                 style={{ fontFamily: "'Syne', sans-serif" }}
@@ -165,13 +165,13 @@ function FeatureCarousel({ inView }) {
                 {f.title}
               </h3>
 
-              {/* Body */}
+
               <p className="text-neutral-500 text-base leading-relaxed"
                 style={{ fontFamily: "'DM Sans', sans-serif" }}>
                 {f.body}
               </p>
 
-              {/* Stat */}
+
               <div className="mt-auto pt-8 border-t border-neutral-800 flex items-end justify-between">
                 <div>
                   <div className={`text-5xl font-extrabold tabular-nums leading-none ${c.text}`}
@@ -197,7 +197,7 @@ function FeatureCarousel({ inView }) {
   );
 }
 
-// ── ACTIVITY FEED ────────────────────────────────────────────────
+
 function ActivityFeed({ inView }) {
   const [active, setActive] = useState(0);
   useEffect(() => {
@@ -242,7 +242,7 @@ function ActivityFeed({ inView }) {
   );
 }
 
-// ── MAIN ─────────────────────────────────────────────────────────
+
 export default function WhySkillSwap() {
   const [sectionRef, inView] = useInView(0.1);
 
@@ -252,7 +252,7 @@ export default function WhySkillSwap() {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_40%_at_50%_0%,rgba(163,230,53,0.04),transparent)] pointer-events-none" />
 
-      {/* ── HEADER ── */}
+
       <div
         className="px-16 max-w-6xl mx-auto mb-16"
         style={{
@@ -283,7 +283,7 @@ export default function WhySkillSwap() {
         </div>
       </div>
 
-      {/* ── CAROUSEL ── */}
+
       <div
         style={{
           opacity: inView ? 1 : 0,
@@ -293,7 +293,7 @@ export default function WhySkillSwap() {
         <FeatureCarousel inView={inView} />
       </div>
 
-      {/* ── BOTTOM ROW ── */}
+
       <div
         className="px-16 max-w-6xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-5 gap-5"
         style={{
@@ -303,7 +303,7 @@ export default function WhySkillSwap() {
         }}
       >
 
-        {/* Live feed — 3 cols */}
+
         <div className="md:col-span-3 rounded-3xl border border-neutral-800/80 bg-neutral-900/40 p-8 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(163,230,53,0.03),transparent_65%)] pointer-events-none" />
           <div className="flex items-center justify-between mb-8">
@@ -320,7 +320,7 @@ export default function WhySkillSwap() {
           </div>
           <ActivityFeed inView={inView} />
 
-          {/* Mini stat row */}
+
           <div className="flex gap-8 mt-8 pt-8 border-t border-neutral-800">
             {[
               { n: "12k+", l: "learners online" },
@@ -335,7 +335,7 @@ export default function WhySkillSwap() {
           </div>
         </div>
 
-        {/* CTA — 2 cols */}
+
         <div className="md:col-span-2 rounded-3xl border border-neutral-800/80 bg-neutral-900/40 p-8 flex flex-col justify-between relative overflow-hidden group hover:border-neutral-700 transition-all duration-400">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(167,139,250,0.05),transparent_65%)] pointer-events-none" />
 

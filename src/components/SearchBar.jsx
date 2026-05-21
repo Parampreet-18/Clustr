@@ -7,13 +7,13 @@ export default function SearchBar() {
 
   return (
     <div
-      className={`flex items-center bg-neutral-900/60 backdrop-blur-md border rounded-full px-6 py-2.5 gap-3 max-w-[520px] transition-all duration-300 ${
+      className={`flex w-full items-center bg-neutral-900/60 backdrop-blur-md border rounded-full px-4 sm:px-6 py-2.5 gap-3 max-w-[520px] transition-all duration-300 ${
         isFocused
           ? "border-lime-400 shadow-[0_0_0_3px_rgba(163,230,53,0.15),0_8px_32px_rgba(163,230,53,0.1)] scale-[1.02]"
           : "border-neutral-700/50 hover:border-neutral-600"
       }`}
     >
-      {/* Search icon */}
+
       <svg
         className={`shrink-0 transition-colors duration-300 ${isFocused ? "text-lime-400" : "text-neutral-500"}`}
         width="17"
@@ -39,7 +39,7 @@ export default function SearchBar() {
         onBlur={() => setIsFocused(false)}
       />
 
-      {/* Clear button — shown when there's input */}
+
       {value && (
         <button
           onClick={() => { setValue(""); inputRef.current?.focus(); }}
@@ -51,7 +51,7 @@ export default function SearchBar() {
         </button>
       )}
 
-      {/* Arrow button — fixed: hover animation uses inline style, not group-hover */}
+
       <button
         className="bg-lime-400 hover:bg-lime-300 transition-all duration-200 rounded-full w-10 h-10 flex items-center justify-center shrink-0 hover:scale-110 hover:shadow-lg hover:shadow-lime-400/30 active:scale-95"
         onClick={() => inputRef.current?.focus()}

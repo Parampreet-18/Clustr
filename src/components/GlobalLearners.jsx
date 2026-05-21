@@ -29,20 +29,20 @@ function useInView(threshold = 0.1) {
   return [ref, inView];
 }
 
-// Minimal country card component
+
 function CountryCard({ country, onClick }) {
   const [isHovered, setIsHovered] = useState(false);
   
   return (
     <div
-      className="flex-shrink-0 w-[320px] cursor-pointer"
+      className="flex-shrink-0 w-[260px] sm:w-[320px] cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onClick}
     >
       <div className="border border-neutral-300/10 rounded-lg bg-white/[0.02] backdrop-blur-sm overflow-hidden transition-all duration-400 hover:border-neutral-300/20 hover:bg-white/[0.04]">
         <div className="p-5">
-          {/* Header */}
+
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3 flex-1">
               <span className="text-3xl">{country.flag}</span>
@@ -55,7 +55,7 @@ function CountryCard({ country, onClick }) {
             </div>
           </div>
 
-          {/* Stats - minimalist grid */}
+
           <div className="space-y-3 mb-4">
             <div className="flex justify-between items-baseline">
               <span className="text-neutral-500 text-xs tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>Learners</span>
@@ -71,10 +71,10 @@ function CountryCard({ country, onClick }) {
             </div>
           </div>
 
-          {/* Divider */}
+
           <div className="h-px bg-neutral-300/10 my-4" />
 
-          {/* Footer */}
+
           <div className="flex items-center justify-between">
             <span className="text-neutral-400 text-xs" style={{ fontFamily: "'Inter', sans-serif" }}>{country.time}</span>
             <div className={`flex items-center justify-center w-6 h-6 transition-all duration-300 ${isHovered ? 'translate-x-0.5' : ''}`}>
@@ -89,13 +89,13 @@ function CountryCard({ country, onClick }) {
   );
 }
 
-// Marquee component
+
 function MarqueeRow({ countries, direction = 'left', speed = 40 }) {
   return (
     <div className="relative overflow-hidden">
-      {/* Subtle gradient fades */}
-      <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+
+      <div className="absolute left-0 top-0 bottom-0 w-10 sm:w-24 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-10 sm:w-24 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
       
       <div
         className="flex gap-6 animate-marquee"
@@ -131,20 +131,20 @@ export default function GlobalLearnersPremium() {
         background: 'linear-gradient(to bottom, #0a0a0a 0%, #0f0f15 50%, #0a0a0a 100%)'
       }}
     >
-      {/* Premium header accent */}
+
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-lime-400/10 to-transparent" />
       
-      {/* Very subtle glow effect */}
+
       <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-lime-400/2 to-transparent" />
       
-      {/* Minimal background texture */}
+
       <div className="absolute inset-0 opacity-40" style={{
         backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 1px)',
         backgroundSize: '40px 40px',
       }} />
 
-      {/* Header */}
-      <div className="relative max-w-6xl mx-auto px-12 pt-24 pb-16 z-10">
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pt-16 sm:pt-24 pb-12 sm:pb-16 z-10">
         <div
           style={{
             opacity: inView ? 1 : 0,
@@ -152,23 +152,23 @@ export default function GlobalLearnersPremium() {
             transition: 'all 1s cubic-bezier(0.2,0.5,0.4,1)',
           }}
         >
-          {/* Label */}
+
           <div className="mb-6">
             <span className="inline-block text-neutral-400 text-xs tracking-widest font-medium" style={{ fontFamily: "'Inter', sans-serif" }}>GLOBAL NETWORK</span>
           </div>
 
-          {/* Main title */}
+
           <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight leading-tight max-w-2xl" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             Real-time learning happening across {COUNTRIES.length} countries
           </h2>
 
-          {/* Description */}
+
           <p className="text-neutral-400 text-sm md:text-base max-w-lg mb-12 leading-relaxed" style={{ fontFamily: "'Inter', sans-serif" }}>
             Watch as thousands of learners connect and grow their skills worldwide. Live updates, real metrics.
           </p>
 
-          {/* Stats grid - minimal */}
-          <div className="grid grid-cols-3 gap-8 max-w-md">
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-md">
             <div>
               <p className="text-neutral-500 text-xs tracking-widest uppercase mb-2" style={{ fontFamily: "'Inter', sans-serif" }}>Total Learners</p>
               <p className="text-white text-2xl font-extrabold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{total}K</p>
@@ -185,7 +185,7 @@ export default function GlobalLearnersPremium() {
         </div>
       </div>
 
-      {/* Single clean ticker */}
+
       <div
         className="relative py-12"
         style={{
@@ -196,9 +196,9 @@ export default function GlobalLearnersPremium() {
         <MarqueeRow countries={COUNTRIES} direction="left" speed={30} />
       </div>
 
-      {/* CTA Section - Simplified */}
+
       <div
-        className="relative max-w-6xl mx-auto px-12 pb-24 z-10 text-center"
+        className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 pb-16 sm:pb-24 z-10 text-center"
         style={{
           opacity: inView ? 1 : 0,
           transform: inView ? 'translateY(0)' : 'translateY(20px)',

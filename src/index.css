@@ -3,8 +3,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+Pro:wght@300;400;500;600;700&display=swap');
 
 @layer base {
+  html, body, #root {
+    min-height: 100%;
+    width: 100%;
+    margin: 0;
+  }
+
   * {
     font-feature-settings: "kern", "liga", "calt";
+    box-sizing: border-box;
   }
   
   body {
@@ -13,6 +20,14 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-variation-settings: "slnt" 0;
+    overflow-x: hidden;
+    background: #0d0d0d;
+  }
+
+  img,
+  video {
+    display: block;
+    max-width: 100%;
   }
   
   h1, h2, h3, h4, h5, h6 {

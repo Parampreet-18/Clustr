@@ -7,7 +7,7 @@ const NAV_LINKS = [
   { label: "Mission",   id: "section-mission"   },
 ];
 
-const NAVBAR_HEIGHT = 64; // px — adjust if your nav is taller/shorter
+const NAVBAR_HEIGHT = 64;
 
 function scrollToId(id) {
   const el = document.getElementById(id);
@@ -16,16 +16,16 @@ function scrollToId(id) {
 }
 
 function getActiveSection() {
-  // scrollY + navbar offset = the "trigger line" in document coordinates
+
   const scrollPos = window.scrollY + NAVBAR_HEIGHT + 10;
 
-  // Build a list of { id, top } sorted by top ascending
+
   const positions = NAV_LINKS.map(({ id }) => {
     const el = document.getElementById(id);
     return { id, top: el ? el.offsetTop : Infinity };
   });
 
-  // Find the last section whose top is at or above the trigger line
+
   let active = positions[0].id;
   for (const { id, top } of positions) {
     if (top <= scrollPos) active = id;
@@ -33,7 +33,7 @@ function getActiveSection() {
   return active;
 }
 
-export default function Navbar() {
+export default function Navbar({ onLogin, onLogout, user, authReady }) {
   const [scrolled,      setScrolled]      = useState(false);
   const [activeSection, setActiveSection] = useState("section-hero");
   const [menuOpen,      setMenuOpen]      = useState(false);
@@ -53,7 +53,7 @@ export default function Navbar() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    // Initial call — wait for all sections to mount and paint
+
     const timer = setTimeout(updateActive, 200);
 
     return () => {
@@ -63,15 +63,17 @@ export default function Navbar() {
     };
   }, [updateActive]);
 
+  const authLabel = user?.displayName || user?.email || "Account";
+
   return (
     <nav
-      className={`flex items-center justify-between px-8 md:px-16 py-4 sticky top-0 z-50 transition-all duration-500 ${
+      className={`flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sticky top-0 z-50 transition-all duration-500 ${
         scrolled
           ? "bg-[#0f1117]/85 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.28)]"
           : "bg-transparent"
       }`}
     >
-      {/* Logo */}
+      {}
       <a
         href="#"
         onClick={(e) => { e.preventDefault(); scrollToId("section-hero"); }}
@@ -81,12 +83,12 @@ export default function Navbar() {
           className="text-xl font-semibold tracking-tight text-white group-hover:text-lime-400 transition-colors duration-300"
           style={{ fontFamily: "'Syne', sans-serif" }}
         >
-          Skill<span className="text-lime-400">Swap</span>
+          <span className="text-lime-400">Clustr</span>
         </span>
         <span className="w-1.5 h-1.5 rounded-full bg-lime-400 mb-3.5 opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
       </a>
 
-      {/* Desktop nav links */}
+      {}
       <div className="hidden md:flex items-center gap-0.5 bg-white/[0.06] border border-white/[0.10] rounded-full px-2 py-1.5">
         {NAV_LINKS.map((link) => {
           const isActive = activeSection === link.id;
@@ -107,30 +109,49 @@ export default function Navbar() {
         })}
       </div>
 
-      {/* Desktop actions */}
+      {}
       <div className="hidden md:flex items-center gap-3 shrink-0">
+        {authReady && user ? (
+          <>
+            <span
+              className="max-w-[180px] truncate px-3 py-1.5 text-[13.5px] text-neutral-200"
+              style={{ fontFamily: "'DM Sans', sans-serif" }}
+            >
+              {authLabel}
+            </span>
+            <button
+              onClick={onLogout}
+              className="text-[13.5px] text-neutral-300 hover:text-white transition-colors duration-200 px-5 py-1.5 rounded-full hover:bg-white/[0.08] cursor-pointer"
+              style={{ fontFamily: "'DM Sans', sans-serif" }}
+            >
+              Log out
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={onLogin}
+            className="text-[13.5px] text-neutral-300 hover:text-white transition-colors duration-200 px-5 py-1.5 rounded-full hover:bg-white/[0.08] cursor-pointer"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
+          >
+            Log in
+          </button>
+        )}
 
         <button
-        onClick={() => window.location.href = "http://localhost:5174"}
-          className="text-[13.5px] text-neutral-300 hover:text-white transition-colors duration-200 px-5 py-1.5 rounded-full hover:bg-white/[0.08] cursor-pointer"
-          style={{ fontFamily: "'DM Sans', sans-serif" }}
-        >
-          Log in
-        </button>
-
-        <button
-          onClick={() => scrollToId("section-cta")}
+          onClick={user ? onLogout : () => scrollToId("section-cta")}
           className="flex items-center gap-2 text-[13.5px] font-semibold text-black bg-lime-400 hover:bg-lime-300 px-5 py-2.5 rounded-full transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] shadow-[0_0_20px_rgba(163,230,53,0.2)] hover:shadow-[0_0_28px_rgba(163,230,53,0.35)]"
           style={{ fontFamily: "'Syne', sans-serif" }}
         >
-          Get started
-          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-          </svg>
+          {user ? "Sign out" : "Get started"}
+          {!user && (
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          )}
         </button>
       </div>
 
-      {/* Mobile hamburger */}
+      {}
       <button
         className="md:hidden flex flex-col gap-1.5 p-2"
         onClick={() => setMenuOpen((v) => !v)}
@@ -141,9 +162,9 @@ export default function Navbar() {
         <span className={`block w-6 h-0.5 bg-white transition-all duration-300 origin-center ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
       </button>
 
-      {/* Mobile dropdown */}
+      {}
       {menuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-[#0f1117]/95 backdrop-blur-xl border-b border-white/[0.08] px-8 py-6 flex flex-col gap-2 md:hidden">
+        <div className="absolute top-full left-0 right-0 bg-[#0f1117]/95 backdrop-blur-xl border-b border-white/[0.08] px-4 sm:px-6 py-6 flex flex-col gap-2 md:hidden">
           {NAV_LINKS.map((link) => {
             const isActive = activeSection === link.id;
             return (
@@ -162,18 +183,42 @@ export default function Navbar() {
             );
           })}
           <div className="flex gap-3 mt-4 pt-4 border-t border-white/[0.08]">
+            {authReady && user ? (
+              <button
+                onClick={() => {
+                  onLogout?.();
+                  setMenuOpen(false);
+                }}
+                className="flex-1 text-sm text-neutral-300 border border-white/[0.15] rounded-full py-2.5 hover:bg-white/[0.06] transition-colors"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+              >
+                Log out
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  onLogin?.();
+                  setMenuOpen(false);
+                }}
+                className="flex-1 text-sm text-neutral-300 border border-white/[0.15] rounded-full py-2.5 hover:bg-white/[0.06] transition-colors"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+              >
+                Log in
+              </button>
+            )}
             <button
-              className="flex-1 text-sm text-neutral-300 border border-white/[0.15] rounded-full py-2.5 hover:bg-white/[0.06] transition-colors"
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
-            >
-              Log in
-            </button>
-            <button
-              onClick={() => { scrollToId("section-cta"); setMenuOpen(false); }}
+              onClick={() => {
+                if (user) {
+                  onLogout?.();
+                } else {
+                  scrollToId("section-cta");
+                }
+                setMenuOpen(false);
+              }}
               className="flex-1 text-sm font-semibold text-black bg-lime-400 hover:bg-lime-300 rounded-full py-2.5 transition-colors"
               style={{ fontFamily: "'Syne', sans-serif" }}
             >
-              Get started
+              {user ? "Sign out" : "Get started"}
             </button>
           </div>
         </div>

@@ -56,17 +56,46 @@ const STATS = [
   { value: "98%", label: "Success Rate" },
 ];
 
+const apiBaseUrl =
+  import.meta.env.VITE_API_URL ||
+  (typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+    ? `${window.location.protocol}//${window.location.hostname}:5000`
+    : "");
+
 export default function Footer() {
   const [sectionRef, inView] = useInView(0.1);
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [subscribeError, setSubscribeError] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
     if (email) {
-      setSubscribed(true);
-      setTimeout(() => setSubscribed(false), 3000);
-      setEmail("");
+      setSubscribing(true);
+      setSubscribeError("");
+
+      try {
+        const response = await fetch(`${apiBaseUrl}/api/newsletter/subscribe`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(data?.message || "Could not subscribe right now.");
+        }
+
+        setSubscribed(true);
+        setTimeout(() => setSubscribed(false), 3000);
+        setEmail("");
+      } catch (error) {
+        setSubscribeError(error.message || "Could not subscribe right now.");
+      } finally {
+        setSubscribing(false);
+      }
     }
   };
 
@@ -78,29 +107,29 @@ export default function Footer() {
         background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1d29 50%, #0f1419 100%)'
       }}
     >
-      {/* Clean Background Effects */}
+
       <div className="absolute inset-0">
-        {/* Simple Gradient Orbs */}
+
         <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-r from-lime-400/8 via-violet-400/6 to-cyan-400/8 rounded-full blur-[150px]" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gradient-to-r from-violet-400/8 via-cyan-400/6 to-lime-400/8 rounded-full blur-[150px]" />
       </div>
 
-      {/* Subtle Grid Pattern */}
+
       <div className="absolute inset-0 opacity-[0.02]" style={{
         backgroundImage: 'linear-gradient(rgba(163,230,53,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(163,230,53,0.3) 1px, transparent 1px)',
         backgroundSize: '60px 60px',
       }} />
 
       <div className="relative z-10">
-        {/* Clean Top Border */}
+
         <div className="h-px bg-gradient-to-r from-transparent via-lime-400/40 to-transparent" />
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-b from-lime-400/10 to-transparent" />
 
-        {/* Main Content */}
-        <div className="max-w-7xl mx-auto px-16 py-24">
-          {/* Premium Newsletter Section */}
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-16 sm:py-24">
+
           <div 
-            className="mb-24"
+            className="mb-16 sm:mb-24"
             style={{
               opacity: inView ? 1 : 0,
               transform: inView ? 'translateY(0)' : 'translateY(40px)',
@@ -108,7 +137,7 @@ export default function Footer() {
             }}
           >
             <div className="max-w-3xl mx-auto text-center">
-              {/* Simple Badge */}
+
               <div className="inline-flex items-center gap-2 bg-lime-400/10 border border-lime-400/30 rounded-full px-6 py-2 mb-6">
                 <div className="w-2 h-2 rounded-full bg-lime-400" />
                 <span className="text-lime-400 text-xs font-medium uppercase tracking-wider" style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -116,7 +145,7 @@ export default function Footer() {
                 </span>
               </div>
               
-              {/* Clean Heading */}
+
               <h3 
                 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
@@ -128,15 +157,15 @@ export default function Footer() {
                 <span className="text-white">Delivered Weekly</span>
               </h3>
               
-              {/* Enhanced Description */}
+
               <p 
-                className="text-neutral-300 text-lg mb-10 max-w-2xl mx-auto leading-relaxed"
+                className="text-neutral-300 text-base sm:text-lg mb-10 max-w-2xl mx-auto leading-relaxed"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 Join 50,000+ learners receiving exclusive tips, success stories, and personalized learning recommendations every week.
               </p>
 
-              {/* Clean Form */}
+
               <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                 <input
                   type="email"
@@ -149,12 +178,21 @@ export default function Footer() {
                 />
                 <button
                   type="submit"
+                  disabled={subscribing}
                   className="px-6 py-3 rounded-full bg-lime-400 text-black font-semibold text-sm hover:bg-lime-300 transition-all duration-300 hover:scale-105"
                   style={{ fontFamily: "'Inter', sans-serif" }}
                 >
-                  Subscribe
+                  {subscribing ? "Subscribing..." : "Subscribe"}
                 </button>
               </form>
+
+              {subscribeError && (
+                <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/20 border border-red-500/30">
+                  <span className="text-red-300 text-sm font-medium" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    {subscribeError}
+                  </span>
+                </div>
+              )}
 
               {subscribed && (
                 <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-lime-400/20 border border-lime-400/30">
@@ -169,23 +207,23 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Links Grid */}
+
           <div 
-            className="grid grid-cols-2 md:grid-cols-5 gap-12 mb-20"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 sm:gap-12 mb-16 sm:mb-20"
             style={{
               opacity: inView ? 1 : 0,
               transform: inView ? 'translateY(0)' : 'translateY(30px)',
               transition: 'all 0.8s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s'
             }}
           >
-            {/* Clean Brand Section */}
+
             <div className="col-span-2 md:col-span-1">
               <div className="mb-6">
                 <h4 
                   className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-violet-400 mb-3"
                   style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
-                  SkillSwap
+                  Clustr
                 </h4>
                 <p 
                   className="text-neutral-400 text-sm leading-relaxed"
@@ -195,8 +233,8 @@ export default function Footer() {
                 </p>
               </div>
 
-              {/* Clean Social Links */}
-              <div className="flex gap-3">
+
+              <div className="flex flex-wrap gap-3">
                 {SOCIAL_LINKS.map((social, i) => (
                   <a
                     key={i}
@@ -210,7 +248,7 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Clean Link Sections */}
+
             {Object.entries(FOOTER_LINKS).map(([category, links]) => (
               <div key={category}>
                 <h5 
@@ -236,7 +274,7 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Clean Bottom Section */}
+
           <div 
             className="pt-6 border-t border-neutral-800/50"
             style={{
@@ -250,10 +288,10 @@ export default function Footer() {
                 className="text-neutral-500 text-sm"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
-                © 2024 <span className="text-lime-400 font-medium">SkillSwap</span>. All rights reserved.
+                © 2026 <span className="text-lime-400 font-medium">Clustr</span>. All rights reserved.
               </p>
               
-              <div className="flex items-center gap-6">
+              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-lime-400" />
                   <span className="text-neutral-400 text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -261,7 +299,7 @@ export default function Footer() {
                   </span>
                 </div>
                 
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center justify-center gap-4">
                   <a href="#" className="text-neutral-400 hover:text-lime-400 transition-colors duration-200 text-sm" style={{ fontFamily: "'Inter', sans-serif" }}>
                     Cookie Settings
                   </a>
@@ -274,7 +312,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Clean Bottom Gradient */}
+
         <div className="h-16 bg-gradient-to-t from-black to-transparent" />
       </div>
     </footer>
